@@ -1,5 +1,5 @@
-require 'core.options'  -- Load general options
-require 'core.keymaps'  -- Load general keymaps
+require 'core.options' -- Load general options
+require 'core.keymaps' -- Load general keymaps
 require 'core.snippets' -- Custom code snippets
 
 -- Install package manager
@@ -37,7 +37,8 @@ require('lazy').setup({
   require 'plugins.lualine',
   require 'plugins.bufferline',
   require 'plugins.neo-tree',
-  require 'plugins.alpha',
+  -- require 'plugins.alpha',
+  require 'plugins.beneliath',
   require 'plugins.indent-blankline',
   require 'plugins.lazygit',
   require 'plugins.comment',
