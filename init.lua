@@ -1,5 +1,5 @@
-require 'core.options' -- Load general options
-require 'core.keymaps' -- Load general keymaps
+require 'core.options'  -- Load general options
+require 'core.keymaps'  -- Load general keymaps
 require 'core.snippets' -- Custom code snippets
 
 -- Install package manager
@@ -15,6 +15,11 @@ if not vim.loop.fs_stat(lazypath) then
   }
 end
 vim.opt.rtp:prepend(lazypath)
+
+vim.keymap.set('n', '<leader>ts', function()
+  local timestamp = os.date '%Y-%m-%d %H:%M:%S'
+  vim.api.nvim_put({ timestamp }, 'c', true, true)
+end, { desc = 'Insert timestamp' })
 
 -- Import color theme based on environment variable NVIM_THEME
 local default_color_scheme = 'nord'
@@ -47,10 +52,10 @@ require('lazy').setup({
   require 'plugins.database',
   require 'plugins.misc',
   require 'plugins.harpoon',
-  -- require 'plugins.avante',
   -- require 'plugins.chatgpt',
   require 'plugins.aerial',
   require 'plugins.vim-tmux-navigator',
+  require 'plugins.avante',
 }, {
   ui = {
     -- If you have a Nerd Font, set icons to an empty table which will use the
