@@ -1,5 +1,5 @@
-require 'core.options'  -- Load general options
-require 'core.keymaps'  -- Load general keymaps
+require 'core.options' -- Load general options
+require 'core.keymaps' -- Load general keymaps
 require 'core.snippets' -- Custom code snippets
 
 -- Install package manager
@@ -43,6 +43,7 @@ require('lazy').setup({
   require 'plugins.bufferline',
   require 'plugins.neo-tree',
   -- require 'plugins.alpha',
+  require 'plugins.noice',
   require 'plugins.beneliath',
   require 'plugins.indent-blankline',
   require 'plugins.lazygit',
@@ -55,6 +56,7 @@ require('lazy').setup({
   -- require 'plugins.chatgpt',
   require 'plugins.aerial',
   require 'plugins.vim-tmux-navigator',
+  require 'plugins.notify',
   require 'plugins.avante',
 }, {
   ui = {
