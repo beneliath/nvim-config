@@ -1,5 +1,5 @@
-require 'core.options' -- Load general options
-require 'core.keymaps' -- Load general keymaps
+require 'core.options'  -- Load general options
+require 'core.keymaps'  -- Load general keymaps
 require 'core.snippets' -- Custom code snippets
 
 -- Install package manager
@@ -58,6 +58,7 @@ require('lazy').setup({
   require 'plugins.vim-tmux-navigator',
   require 'plugins.notify',
   require 'plugins.avante',
+  require 'plugins.minimap',
 }, {
   ui = {
     -- If you have a Nerd Font, set icons to an empty table which will use the
