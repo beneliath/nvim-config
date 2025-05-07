@@ -19,7 +19,20 @@ return {
   {
     -- Hints keybinds
     'folke/which-key.nvim',
-    opts = {},
+    opts = {
+      -- win = {
+      --   border = {
+      --     { '┌', 'FloatBorder' },
+      --     { '─', 'FloatBorder' },
+      --     { '┐', 'FloatBorder' },
+      --     { '│', 'FloatBorder' },
+      --     { '┘', 'FloatBorder' },
+      --     { '─', 'FloatBorder' },
+      --     { '└', 'FloatBorder' },
+      --     { '│', 'FloatBorder' },
+      --   },
+      -- },
+    },
   },
   {
     -- Autoclose parentheses, brackets, quotes, etc.
@@ -36,14 +49,10 @@ return {
     opts = { signs = false },
   },
   {
-    -- high-performance color highlighter (deprecation-free)
+    -- high-performance color highlighter
     'norcalli/nvim-colorizer.lua',
     config = function()
-      local ok, colorizer = pcall(require, 'colorizer')
-      if ok then
-        local filetypes = vim.iter({ '*', '!lazy' }):flatten():totable()
-        colorizer.setup(filetypes)
-      end
+      require('colorizer').setup()
     end,
   },
 }
