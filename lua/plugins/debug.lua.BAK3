@@ -1,0 +1,72 @@
+-- ~/.config/nvim/lua/plugins/debug.lua
+return {
+  {
+    'mfussenegger/nvim-dap',
+    rocks = false,
+    dependencies = {
+      { 'rcarriga/nvim-dap-ui', rocks = false },
+      'nvim-neotest/nvim-nio',
+      'williamboman/mason.nvim',
+      'jay-babu/mason-nvim-dap.nvim',
+      { 'leoluz/nvim-dap-go', rocks = false }, -- optional
+      { 'mfussenegger/nvim-dap-python', rocks = false }, -- python
+    },
+    config = function()
+      local ok_dap, dap = pcall(require, 'dap')
+      if not ok_dap then
+        vim.notify('nvim-dap not found', vim.log.levels.ERROR)
+        return
+      end
+      local ok_ui, dapui = pcall(require, 'dapui')
+      if not ok_ui then
+        vim.notify('nvim-dap-ui not found', vim.log.levels.ERROR)
+        return
+      end
+
+      require('mason-nvim-dap').setup {
+        automatic_installation = true,
+        automatic_setup = true,
+        ensure_installed = { 'debugpy' },
+        handlers = {},
+      }
+
+      vim.fn.sign_define('DapBreakpoint', { text = '●', texthl = 'DiagnosticSignError' })
+      vim.fn.sign_define('DapBreakpointRejected', { text = '○', texthl = 'DiagnosticSignWarn' })
+      vim.fn.sign_define('DapStopped', { text = '▶', texthl = 'DiagnosticSignInfo' })
+
+      dapui.setup {}
+      dap.listeners.after.event_initialized['dapui_config'] = function()
+        dapui.open()
+      end
+      dap.listeners.before.event_terminated['dapui_config'] = function()
+        dapui.close()
+      end
+      dap.listeners.before.event_exited['dapui_config'] = function()
+        dapui.close()
+      end
+
+      local map = function(m, lhs, rhs, desc)
+        vim.keymap.set(m, lhs, rhs, { desc = desc })
+      end
+      map('n', '<F5>', dap.continue, 'Debug: Start/Continue')
+      map('n', '<F1>', dap.step_into, 'Debug: Step Into')
+      map('n', '<F2>', dap.step_over, 'Debug: Step Over')
+      map('n', '<F3>', dap.step_out, 'Debug: Step Out')
+      map('n', '<F7>', require('dapui').toggle, 'Debug: Toggle DAP UI')
+      map('n', '<leader>b', dap.toggle_breakpoint, 'Debug: Toggle Breakpoint')
+      map('n', '<leader>B', function()
+        dap.set_breakpoint(vim.fn.input 'Breakpoint condition: ')
+      end, 'Debug: Conditional Breakpoint')
+
+      -- Python adapter path (Mason first, fallback to system python3)
+      local mason_py = vim.fn.stdpath 'data' .. '/mason/packages/debugpy/venv/bin/python'
+      local py = (vim.fn.executable(mason_py) == 1) and mason_py or vim.fn.exepath 'python3'
+      local ok_dap_py, dap_python = pcall(require, 'dap-python')
+      if ok_dap_py then
+        dap_python.setup(py)
+      else
+        vim.notify('dap-python not found; Python debugging unavailable', vim.log.levels.WARN)
+      end
+    end,
+  },
+}

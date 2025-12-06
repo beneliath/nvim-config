@@ -1,0 +1,112 @@
+-- ~/.config/nvim/lua/plugins/debug.lua
+return {
+  {
+    'mfussenegger/nvim-dap',
+    rocks = false,
+    dependencies = {
+      { 'rcarriga/nvim-dap-ui', rocks = false },
+      'nvim-neotest/nvim-nio',
+      'williamboman/mason.nvim',
+      'jay-babu/mason-nvim-dap.nvim',
+      { 'leoluz/nvim-dap-go', rocks = false }, -- optional: Go
+      { 'mfussenegger/nvim-dap-python', rocks = false }, -- Python
+    },
+    config = function()
+      local ok_dap, dap = pcall(require, 'dap')
+      if not ok_dap then
+        vim.notify('nvim-dap not found', vim.log.levels.ERROR)
+        return
+      end
+
+      local ok_ui, dapui = pcall(require, 'dapui')
+      if not ok_ui then
+        vim.notify('nvim-dap-ui not found', vim.log.levels.ERROR)
+        return
+      end
+
+      -----------------------------------------------------------------------
+      -- Mason DAP bootstrap
+      -----------------------------------------------------------------------
+      require('mason-nvim-dap').setup {
+        automatic_installation = true,
+        automatic_setup = true,
+        ensure_installed = { 'debugpy' }, -- add "delve" if you want Go
+        handlers = {},
+      }
+
+      -----------------------------------------------------------------------
+      -- Signs & UI
+      -----------------------------------------------------------------------
+      vim.fn.sign_define('DapBreakpoint', { text = '●', texthl = 'DiagnosticSignError', numhl = '' })
+      vim.fn.sign_define('DapBreakpointRejected', { text = '○', texthl = 'DiagnosticSignWarn', numhl = '' })
+      vim.fn.sign_define('DapStopped', { text = '▶', texthl = 'DiagnosticSignInfo', numhl = '' })
+
+      dapui.setup {
+        icons = { expanded = '▾', collapsed = '▸', current_frame = '*' },
+        controls = {
+          icons = {
+            pause = '⏸',
+            play = '▶',
+            step_into = '⏎',
+            step_over = '⏭',
+            step_out = '⏮',
+            step_back = 'b',
+            run_last = '▶▶',
+            terminate = '⏹',
+            disconnect = '⏏',
+          },
+        },
+      }
+
+      -- Auto open/close UI
+      dap.listeners.after.event_initialized['dapui_config'] = function()
+        dapui.open()
+      end
+      dap.listeners.before.event_terminated['dapui_config'] = function()
+        dapui.close()
+      end
+      dap.listeners.before.event_exited['dapui_config'] = function()
+        dapui.close()
+      end
+
+      -----------------------------------------------------------------------
+      -- Keymaps
+      -----------------------------------------------------------------------
+      local map = function(mode, lhs, rhs, desc)
+        vim.keymap.set(mode, lhs, rhs, { desc = desc })
+      end
+
+      map('n', '<F5>', dap.continue, 'Debug: Start/Continue')
+      map('n', '<F1>', dap.step_into, 'Debug: Step Into')
+      map('n', '<F2>', dap.step_over, 'Debug: Step Over')
+      map('n', '<F3>', dap.step_out, 'Debug: Step Out')
+      map('n', '<F7>', dapui.toggle, 'Debug: Toggle DAP UI')
+      map('n', '<leader>b', dap.toggle_breakpoint, 'Debug: Toggle Breakpoint')
+      map('n', '<leader>B', function()
+        dap.set_breakpoint(vim.fn.input 'Breakpoint condition: ')
+      end, 'Debug: Conditional Breakpoint')
+
+      -----------------------------------------------------------------------
+      -- Python adapter (nvim-dap-python)
+      -----------------------------------------------------------------------
+      local mason_py = vim.fn.stdpath 'data' .. '/mason/packages/debugpy/venv/bin/python'
+      local sys_py = vim.fn.exepath 'python3'
+      local py_exec = (vim.fn.executable(mason_py) == 1) and mason_py or sys_py
+
+      local ok_dap_py, dap_python = pcall(require, 'dap-python')
+      if ok_dap_py then
+        dap_python.setup(py_exec)
+      else
+        vim.notify('dap-python not found; Python debugging unavailable', vim.log.levels.WARN)
+      end
+
+      -----------------------------------------------------------------------
+      -- Optional: Go (uncomment to enable if you use Go)
+      -----------------------------------------------------------------------
+      -- local ok_dap_go, dap_go = pcall(require, "dap-go")
+      -- if ok_dap_go then
+      --   dap_go.setup()
+      -- end
+    end,
+  },
+}
