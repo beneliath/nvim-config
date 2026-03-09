@@ -36,7 +36,7 @@ return {
       [[                  ]],
       -- [[ N  E  O  V  I  M        + Avante v0.0.23]],
       [[ N  E  O  V  I  M]],
-      [[ version:  0.11.5 ]],
+      [[ version:  0.11.6 ]],
     }
 
     -- Define 'AlphaNeovimLogoBlue'
