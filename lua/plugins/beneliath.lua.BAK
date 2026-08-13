@@ -1,3 +1,13 @@
+--                                                       ©2024
+--       ("`-''-/").___..--''"`-.            author:     dgilmore
+--       `6_ 6  )   `-.  (     ).`-.__.`)    email:      beneliath@gmail.com
+--       (_Y_.)'  ._   )  `._ `. ``-..-'     filename:   ALPHA
+--     _..`--'_..-_/  /--'_.' ,'
+--    (il),-''  (li),'  ((!.-'               project:
+--                                           version:    0.0.1
+--    Genesis 49:10     Revelation 5:5       timestamp:  Wed 2024-04-03 18:35
+-- --------------------------------------------------------------------------
+
 return {
   'goolord/alpha-nvim',
   dependencies = {
@@ -8,74 +18,41 @@ return {
     local alpha = require 'alpha'
     local dashboard = require 'alpha.themes.startify'
 
-    local function cp(codepoint)
-      return vim.fn.nr2char(codepoint, 1)
-    end
+    dashboard.section.header.val = {
 
-    local function rep(char, count)
-      return string.rep(char, count)
-    end
-
-    -- Generate special glyphs at runtime so they do not get corrupted as <bf>.
-    local tl = cp(0xe0ba) -- �
-    local tr = cp(0xe0b8) -- �
-    local bl = cp(0xe0be) -- �
-    local br = cp(0xe0bc) -- �
-    local block = cp(0x2588) -- �
-
-    local v = vim.version()
-    local version_line = (' version:  %d.%d.%d '):format(v.major, v.minor, v.patch)
-
-    local header = {
-      ' ' .. tl .. rep(block, 3) .. tr .. '       ' .. rep(block, 3) .. tr .. ' ',
-      tl .. bl .. rep(block, 4) .. tr .. '      ' .. rep(block, 4) .. tr .. [[       _                     _ _       _   _     ]],
-      rep(block, 2) .. bl .. rep(block, 4) .. tr .. '     ' .. rep(block, 5) .. [[      | |                   | (_)     | | | |    ]],
-      rep(block, 3) .. bl .. rep(block, 4) .. tr .. '    ' .. rep(block, 5) .. [[      | |__   ___ _ __   ___| |_  __ _| |_| |__  ]],
-      rep(block, 4) .. bl .. rep(block, 4) .. tr .. '   ' .. rep(block, 5) .. [[      | '_ \ / _ \ '_ \ / _ \ | |/ _` | __| '_ \ ]],
-      rep(block, 5) .. bl .. rep(block, 4) .. tr .. '  ' .. rep(block, 5) .. [[      | |_) |  __/ | | |  __/ | | (_| | |_| | | |]],
-      rep(block, 5) .. ' ' .. bl .. rep(block, 4) .. tr .. ' ' .. rep(block, 5) .. [[      |_.__/ \___|_| |_|\___|_|_|\__,_|\__|_| |_|]],
-      rep(block, 5) .. '  ' .. bl .. rep(block, 4) .. tr .. rep(block, 5),
-      rep(block, 5) .. '   ' .. bl .. rep(block, 4) .. tr .. rep(block, 4) .. [[          ("`-''-/").___..--''"`-.        ]],
-      rep(block, 5) .. '    ' .. bl .. rep(block, 4) .. tr .. rep(block, 3) .. [[           `6_ 6  )   `-.  (     ).`-.__.`)]],
-      rep(block, 5) .. '     ' .. bl .. rep(block, 4) .. tr .. rep(block, 2) .. [[           (_Y_.)'  ._   )  `._ `. ``-..-' ]],
-      bl .. rep(block, 4) .. '      ' .. bl .. rep(block, 4) .. tr .. br .. [[         _..`--'_..-_/  /--'_.' ,'         ]],
-      ' ' .. bl .. rep(block, 3) .. '       ' .. bl .. rep(block, 3) .. br .. [[        (il),-''  (li),'  ((!.-'           ]],
+      [[ ███       ███ ]],
+      [[████      ████       _                     _ _       _   _     ]],
+      [[██████     █████      | |                   | (_)     | | | |    ]],
+      [[███████    █████      | |__   ___ _ __   ___| |_  __ _| |_| |__  ]],
+      [[████████   █████      | '_ \ / _ \ '_ \ / _ \ | |/ _` | __| '_ \ ]],
+      [[█████████  █████      | |_) |  __/ | | |  __/ | | (_| | |_| | | |]],
+      [[█████ ████ █████      |_.__/ \___|_| |_|\___|_|_|\__,_|\__|_| |_|]],
+      [[█████  █████████]],
+      [[█████   ████████          ("`-''-/").___..--''"`-.        ]],
+      [[█████    ███████           `6_ 6  )   `-.  (     ).`-.__.`)]],
+      [[█████     ██████           (_Y_.)'  ._   )  `._ `. ``-..-' ]],
+      [[████      ████         _..`--'_..-_/  /--'_.' ,'         ]],
+      [[ ███       ███        (il),-''  (li),'  ((!.-'           ]],
       [[                  ]],
+      -- [[ N  E  O  V  I  M        + Avante v0.0.23]],
       [[ N  E  O  V  I  M]],
-      version_line,
+      [[ version:  0.11.6 ]],
     }
 
-    dashboard.section.header.val = header
+    -- Define 'AlphaNeovimLogoBlue'
+    vim.api.nvim_set_hl(0, 'AlphaNeovimLogoBlue', { fg = '#86a5e2', bg = 'NONE', bold = true })
 
-    vim.api.nvim_set_hl(0, 'AlphaNeovimLogoBlue', {
-      fg = '#86a5e2',
-      bg = 'NONE',
-      bold = true,
-    })
+    -- Define 'AlphaNeovimLogoBlue'
+    vim.api.nvim_set_hl(0, 'AlphaNeovimBrandBlue', { fg = '#4c566a', bg = 'NONE', bold = true })
 
-    vim.api.nvim_set_hl(0, 'AlphaNeovimBrandBlue', {
-      fg = '#4c566a',
-      bg = 'NONE',
-      bold = true,
-    })
+    -- Define 'AlphaNeovimLogoGreen'
+    vim.api.nvim_set_hl(0, 'AlphaNeovimLogoGreen', { fg = '#a4d09b', bg = 'NONE', bold = true })
 
-    vim.api.nvim_set_hl(0, 'AlphaNeovimLogoGreen', {
-      fg = '#a4d09b',
-      bg = 'NONE',
-      bold = true,
-    })
+    -- Define 'AlphaNeovimLogoGreenFBlueB'
+    vim.api.nvim_set_hl(0, 'AlphaNeovimLogoGreenFBlueB', { fg = '#a4d09b', bg = '#86a5e2', bold = true })
 
-    vim.api.nvim_set_hl(0, 'AlphaNeovimLogoGreenFBlueB', {
-      fg = '#a4d09b',
-      bg = '#86a5e2',
-      bold = true,
-    })
-
-    vim.api.nvim_set_hl(0, 'AlphaNeovimLogoLightGreen', {
-      fg = '#51664c',
-      bg = 'NONE',
-      bold = false,
-    })
+    -- Define 'AlphaNeovimLogoLightGreen'
+    vim.api.nvim_set_hl(0, 'AlphaNeovimLogoLightGreen', { fg = '#51664c', bg = 'NONE', bold = false })
 
     dashboard.section.header.opts.hl = {
       {
@@ -115,6 +92,7 @@ return {
         { 'AlphaNeovimLogoBlue', 0, 13 },
         { 'AlphaNeovimLogoGreen', 14, 31 },
         { 'AlphaNeovimLogoBlue', 32, 49 },
+        { 'AlphaNeovimLogoBlue', 50, 48 },
         { 'AlphaNeovimBrandBlue', 49, 100 },
       },
       {
@@ -162,13 +140,8 @@ return {
         { 'AlphaNeovimLogoLightGreen', 36, 100 },
       },
       {},
-      {
-        { 'AlphaNeovimLogoGreen', 0, 9 },
-        { 'AlphaNeovimLogoBlue', 9, 18 },
-      },
-      {
-        { 'AlphaNeovimLogoLightGreen', 0, 100 },
-      },
+      { { 'AlphaNeovimLogoGreen', 0, 9 }, { 'AlphaNeovimLogoBlue', 9, 18 } },
+      { { 'AlphaNeovimLogoLightGreen', 0, 18 } },
     }
 
     alpha.setup(dashboard.opts)
